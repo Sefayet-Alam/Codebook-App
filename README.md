@@ -6,7 +6,7 @@ Codebook App is a Flutter-based mobile application designed to help programmers 
 It integrates Firebase for backend services such as authentication and Firestore database management. The app also leverages AI-powered code suggestions via the Groq API.
 
 ---
-
+<img src=
 ## Technology Stack & Libraries Used
 
 - **Flutter & Dart**: Frontend mobile application development  
@@ -72,10 +72,3 @@ Happy coding! 🚀
 
 
 ---
-
-### How to use the bash script:
-
-- Save the above script into a file, for example `create_readme.sh` in your project root.
-- Run:
-bash create_readme.sh
-This will generate a complete README.md in your current directory.

@@ -7,6 +7,11 @@ It integrates Firebase for backend services such as authentication and Firestore
 <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/pic1.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
 <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/pic2.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
 <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss3.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
+<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss4.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
+<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss5.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
+<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss6.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
+<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss7.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
+
 <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss8.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
 <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss9.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
 

@@ -4,16 +4,17 @@
 
 Codebook App is a Flutter-based mobile application designed to help programmers create, manage, and share their own coding snippets and notes efficiently.  
 It integrates Firebase for backend services such as authentication and Firestore database management. The app also leverages AI-powered code suggestions via the Groq API.
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/pic1.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/pic2.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss3.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss4.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss5.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss6.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss7.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
+<div style="display: flex; gap: 12px; justify-content: flex-start; align-items: flex-start; flex-wrap: wrap;">
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/pic1.jpg" alt="Screenshot 1" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/pic2.jpg" alt="Screenshot 2" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss3.jpg" alt="Screenshot 3" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss4.jpg" alt="Screenshot 4" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss5.jpg" alt="Screenshot 5" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss6.jpg" alt="Screenshot 6" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss7.jpg" alt="Screenshot 7" width="150" style="height:auto;" />
+  <img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss8.jpg" alt="Screenshot 8" width="150" style="height:auto;" />
+</div>
 
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss8.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
-<img src="https://github.com/Sefayet-Alam/Codebook-App/blob/main/Pics/ss9.jpg" alt="Mobile Screenshot" width="200" style="height:auto;" />
 
 ---
 <img src=

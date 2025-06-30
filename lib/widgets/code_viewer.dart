@@ -19,12 +19,14 @@ class CodeViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF1E1E1E), // match VSCode dark bg
+      backgroundColor: const Color(0xFF1E1E1E),
       title: const Text('View Code', style: TextStyle(color: Colors.white)),
       content: SingleChildScrollView(
         child: HighlightView(
-          code,
-          language: language.toLowerCase(),
+          code.isNotEmpty ? code : '// No code provided',
+          language: language.toLowerCase().isNotEmpty
+              ? language.toLowerCase()
+              : 'plaintext',
           theme: vs2015Theme,
           padding: const EdgeInsets.all(12),
           textStyle: const TextStyle(

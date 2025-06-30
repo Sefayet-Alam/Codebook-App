@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/firestore_service.dart';
+
 import 'snippets_screen.dart';
+import '../models/section.dart';
 
 class SectionsScreen extends StatefulWidget {
   const SectionsScreen({Key? key}) : super(key: key);
@@ -12,29 +14,22 @@ class SectionsScreen extends StatefulWidget {
 
 class _SectionsScreenState extends State<SectionsScreen> {
   List<Section> _sections = [];
+  late final FirestoreService firestore;
 
   @override
   void initState() {
     super.initState();
-    _loadSections();
-  }
-
-  void _loadSections() {
-    final firestore = context.read<FirestoreService>();
+    firestore = context.read<FirestoreService>();
     firestore.streamSections().listen((sections) {
-      setState(() => _sections = sections);
+      if (mounted) setState(() => _sections = sections);
     });
   }
 
   Future<void> _reorderSections(int oldIndex, int newIndex) async {
     if (newIndex > oldIndex) newIndex -= 1;
-
-    setState(() {
-      final section = _sections.removeAt(oldIndex);
-      _sections.insert(newIndex, section);
-    });
-
-    final firestore = context.read<FirestoreService>();
+    final item = _sections.removeAt(oldIndex);
+    _sections.insert(newIndex, item);
+    setState(() {});
     await firestore.updateSectionsOrder(_sections);
   }
 
@@ -57,7 +52,6 @@ class _SectionsScreenState extends State<SectionsScreen> {
             onPressed: () async {
               final name = controller.text.trim();
               if (name.isNotEmpty) {
-                final firestore = context.read<FirestoreService>();
                 await firestore.addSection(name);
                 Navigator.pop(context);
               }
@@ -81,9 +75,9 @@ class _SectionsScreenState extends State<SectionsScreen> {
       body: _sections.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : ReorderableListView.builder(
-              padding: const EdgeInsets.all(8),
               itemCount: _sections.length,
               onReorder: _reorderSections,
+              padding: const EdgeInsets.all(8),
               buildDefaultDragHandles: false,
               itemBuilder: (context, index) {
                 final section = _sections[index];
@@ -99,40 +93,37 @@ class _SectionsScreenState extends State<SectionsScreen> {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        final confirmed = await showDialog<bool>(
+                        final confirm = await showDialog<bool>(
                           context: context,
                           builder: (_) => AlertDialog(
                             title: const Text('Delete Section'),
                             content: Text('Delete "${section.name}"?'),
                             actions: [
                               TextButton(
-                                child: const Text('Cancel'),
                                 onPressed: () => Navigator.pop(context, false),
+                                child: const Text('Cancel'),
                               ),
                               TextButton(
-                                child: const Text('Delete'),
                                 onPressed: () => Navigator.pop(context, true),
+                                child: const Text('Delete'),
                               ),
                             ],
                           ),
                         );
-                        if (confirmed == true) {
-                          final firestore = context.read<FirestoreService>();
+                        if (confirm == true) {
                           await firestore.deleteSection(section.id);
                         }
                       },
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SnippetsScreen(
-                            sectionId: section.id,
-                            sectionName: section.name,
-                          ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SnippetsScreen(
+                          sectionId: section.id,
+                          sectionName: section.name,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 );
               },

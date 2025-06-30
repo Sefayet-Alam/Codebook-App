@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
 import 'package:open_file/open_file.dart';
@@ -20,38 +19,17 @@ class PdfScreen extends StatefulWidget {
 class _PdfScreenState extends State<PdfScreen> {
   bool _saving = false;
 
-  Future<bool> _requestPermission() async {
-    if (Platform.isAndroid) {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        status = await Permission.storage.request();
-      }
-      return status.isGranted;
-    }
-    return true;
-  }
-
-  Future<String?> _savePdfToDownloads(pw.Document pdf) async {
-    await _requestPermission();
+  Future<String?> _savePdfToAppStorage(pw.Document pdf) async {
     try {
       final bytes = await pdf.save();
 
-      Directory downloadsDir;
-      if (Platform.isAndroid) {
-        downloadsDir = Directory('/storage/emulated/0/Download');
-      } else {
-        downloadsDir = await getApplicationDocumentsDirectory();
-      }
-
-      if (!await downloadsDir.exists()) {
-        await downloadsDir.create(recursive: true);
-      }
+      final dir = await getExternalStorageDirectory();
+      if (dir == null) throw 'Could not access external storage directory';
 
       final filePath =
-          '${downloadsDir.path}/all_snippets_${DateTime.now().millisecondsSinceEpoch}.pdf';
+          '${dir.path}/all_snippets_${DateTime.now().millisecondsSinceEpoch}.pdf';
       final file = File(filePath);
-
-      await file.writeAsBytes(bytes);
+      await file.writeAsBytes(bytes, flush: true);
       return file.path;
     } catch (e) {
       debugPrint('Error saving PDF: $e');
@@ -59,7 +37,49 @@ class _PdfScreenState extends State<PdfScreen> {
     }
   }
 
-  Future<void> _printSaveAndOpenPdf() async {
+  Future<void> _showTeamNameDialog() async {
+    final teamNameController = TextEditingController();
+
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Enter Team Name'),
+        content: TextField(
+          controller: teamNameController,
+          decoration: const InputDecoration(
+            hintText: 'Team name',
+            border: OutlineInputBorder(),
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final trimmed = teamNameController.text.trim();
+              if (trimmed.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please enter a team name')),
+                );
+              } else {
+                Navigator.pop(context, trimmed);
+              }
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+
+    if (result != null && result.isNotEmpty) {
+      await _printSaveAndOpenPdf(result);
+    }
+  }
+
+  Future<void> _printSaveAndOpenPdf(String teamName) async {
     setState(() => _saving = true);
 
     final firestore = context.read<FirestoreService>();
@@ -72,8 +92,12 @@ class _PdfScreenState extends State<PdfScreen> {
       setState(() => _saving = false);
       return;
     }
-    final pdf = await PdfGenerator.generateCombinedPdf(snippets);
-    final savedPath = await _savePdfToDownloads(pdf);
+
+    final pdf = await PdfGenerator.generateCombinedPdf(
+      snippets,
+      teamName: teamName,
+    );
+    final savedPath = await _savePdfToAppStorage(pdf);
 
     setState(() => _saving = false);
 
@@ -82,17 +106,21 @@ class _PdfScreenState extends State<PdfScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text('PDF saved to:\n$savedPath')));
 
-      final result = await OpenFile.open(savedPath);
-      if (result.type != ResultType.done) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open PDF: ${result.message}')),
-        );
+      try {
+        final result = await OpenFile.open(savedPath);
+        if (result.type != ResultType.done) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not open PDF: ${result.message}')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to open PDF: $e')));
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to save PDF. Permission denied or error.'),
-        ),
+        const SnackBar(content: Text('Failed to save PDF. Try again.')),
       );
     }
   }
@@ -114,7 +142,7 @@ class _PdfScreenState extends State<PdfScreen> {
               label: _saving
                   ? const Text('Saving PDF...')
                   : const Text('Export All Snippets'),
-              onPressed: _saving ? null : _printSaveAndOpenPdf,
+              onPressed: _saving ? null : _showTeamNameDialog,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.tealAccent[700],
                 foregroundColor: Colors.black,

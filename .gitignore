@@ -74,3 +74,4 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 *.iml
 *.lock
 *.log
+lib/env.dart

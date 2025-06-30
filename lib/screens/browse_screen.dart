@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/firestore_service.dart';
 import 'snippets_screen.dart'; // Correct import
+import '../models/section.dart'; // ADD THIS
 
 class BrowseScreen extends StatelessWidget {
   const BrowseScreen({super.key});

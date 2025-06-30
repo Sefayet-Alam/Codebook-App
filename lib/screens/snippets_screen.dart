@@ -162,7 +162,11 @@ class _SnippetsScreenState extends State<SnippetsScreen> {
   void saveDoc(Snippet snippet) async {
     setState(() => _saving = true);
 
-    final pdf = await PdfGenerator.generateSimplePdf([snippet]);
+    // Optionally provide a team name, or just omit it
+    final pdf = await PdfGenerator.generateSimplePdf([
+      snippet,
+    ], teamName: 'MyTeam');
+
     final savedPath = await _savePdfToDownloads(pdf);
 
     setState(() => _saving = false);

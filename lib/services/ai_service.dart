@@ -5,34 +5,25 @@ import 'package:flutter/foundation.dart'; // debugPrint
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 
-import '../env.dart'; // Import the generated env class
+import '../env.dart'; // Your env file with API key
 import '../models/snippet.dart';
+import 'firestore_service.dart';
 
 class AIService {
+  final String uid;
   final String _apiKey = Env.groqApiKey;
   final String _apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<List<Snippet>> _fetchAllSnippets() async {
-    try {
-      final snapshot = await _firestore
-          .collectionGroup('snippets')
-          .get()
-          .timeout(const Duration(seconds: 10));
+  late final FirestoreService _firestoreService;
 
-      return snapshot.docs
-          .map(
-            (doc) =>
-                Snippet.fromMap(doc.id, doc.data() as Map<String, dynamic>),
-          )
-          .toList();
-    } on TimeoutException {
-      debugPrint('Snippet fetch timed out after 10 seconds');
-      return [];
-    } catch (e) {
-      debugPrint('Snippet fetch error: $e');
-      return [];
-    }
+  AIService(this.uid) {
+    _firestoreService = FirestoreService(uid);
+  }
+
+  Future<List<Snippet>> _fetchUserSnippets() {
+    // Use existing FirestoreService method to get all snippets across all sections
+    return _firestoreService.getAllSnippets();
   }
 
   Future<String> getCodeSuggestion(String prompt) async {
@@ -41,9 +32,14 @@ class AIService {
     }
 
     try {
-      final snippets = await _fetchAllSnippets();
-      final snippetContext = snippets.isNotEmpty
-          ? "User's snippets:\n${snippets.map((s) => '### ${s.title} (${s.language})\n```${s.language}\n${s.code}\n```').join('\n')}"
+      final snippets = await _fetchUserSnippets();
+      final limitedSnippets = snippets.take(3).toList();
+
+      final snippetContext = limitedSnippets.isNotEmpty
+          ? "User's snippets:\n${limitedSnippets.map((s) {
+              final truncatedCode = s.code.length > 500 ? s.code.substring(0, 500) + '\n...' : s.code;
+              return '### ${s.title} (${s.language})\n```${s.language}\n$truncatedCode\n```';
+            }).join('\n')}"
           : "No snippets available";
 
       final response = await http
@@ -64,22 +60,28 @@ class AIService {
                 {"role": "user", "content": prompt},
               ],
               "temperature": 0.7,
-              "max_tokens": 1024,
+              "max_tokens": 1024, // safer token count
             }),
           )
           .timeout(const Duration(seconds: 15));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['choices'][0]['message']['content'];
+        final data = jsonDecode(response.body);
+        debugPrint('AI response: $data');
+        return data['choices'][0]['message']['content'] ?? '';
       } else {
+        debugPrint('API error ${response.statusCode}: ${response.body}');
         throw Exception('API error ${response.statusCode}: ${response.body}');
       }
     } on SocketException catch (e) {
+      debugPrint('Network error: ${e.message}');
       throw Exception('Network error: ${e.message}');
     } on TimeoutException {
+      debugPrint('Request timed out');
       throw Exception('Request timed out after 15 seconds');
     } catch (e) {
-      throw Exception('Unexpected error: ${e.toString()}');
+      debugPrint('Unexpected error: $e');
+      throw Exception('Unexpected error: $e');
     }
   }
 }

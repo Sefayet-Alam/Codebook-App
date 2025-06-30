@@ -15,9 +15,9 @@ class SnippetEditScreen extends StatefulWidget {
 
 class _SnippetEditScreenState extends State<SnippetEditScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _titleController;
-  late TextEditingController _codeController;
-  late TextEditingController _languageController;
+  late final TextEditingController _titleController;
+  late final TextEditingController _codeController;
+  late final TextEditingController _languageController;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _SnippetEditScreenState extends State<SnippetEditScreen> {
         await firestore.updateSnippet(widget.sectionId, snippet);
       }
 
-      Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
     }
   }
 
@@ -90,15 +90,16 @@ class _SnippetEditScreenState extends State<SnippetEditScreen> {
                     ],
                   ),
                 );
-
                 if (confirm == true) {
                   final firestore = context.read<FirestoreService>();
                   await firestore.deleteSnippet(
                     widget.sectionId,
                     widget.snippet!.id,
                   );
-                  Navigator.pop(context); // close edit screen
-                  Navigator.pop(context); // go back to snippet list
+                  if (context.mounted) {
+                    Navigator.pop(context); // exit edit
+                    Navigator.pop(context); // return to list
+                  }
                 }
               },
             ),
@@ -114,24 +115,23 @@ class _SnippetEditScreenState extends State<SnippetEditScreen> {
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Title'),
                 validator: (val) =>
-                    val == null || val.isEmpty ? 'Please enter a title' : null,
+                    val!.isEmpty ? 'Please enter a title' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _languageController,
                 decoration: const InputDecoration(labelText: 'Language'),
                 validator: (val) =>
-                    val == null || val.isEmpty ? 'Please enter language' : null,
+                    val!.isEmpty ? 'Please enter language' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _codeController,
+                maxLines: 12,
                 decoration: const InputDecoration(labelText: 'Code'),
-                maxLines: 10,
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'Please enter code' : null,
+                validator: (val) => val!.isEmpty ? 'Please enter code' : null,
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _saveSnippet,
                 child: Text(isEditing ? 'Update Snippet' : 'Add Snippet'),

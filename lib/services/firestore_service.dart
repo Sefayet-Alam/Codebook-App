@@ -1,11 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/snippet.dart';
+import '../models/section.dart';
+import '../models/chat_message.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final String uid;
 
-  // Reference to 'sections' collection
-  CollectionReference get _sectionsRef => _db.collection('sections');
+  FirestoreService(this.uid);
+
+  CollectionReference get _sectionsRef =>
+      _db.collection('users').doc(uid).collection('sections');
+
+  CollectionReference get _aiChatsRef =>
+      _db.collection('users').doc(uid).collection('aiChats');
 
   // --- Sections ---
 
@@ -40,7 +48,6 @@ class FirestoreService {
   }
 
   Future<void> deleteSection(String sectionId) async {
-    // Delete all snippets inside section first
     final snippetsSnapshot = await _sectionsRef
         .doc(sectionId)
         .collection('snippets')
@@ -50,7 +57,6 @@ class FirestoreService {
       await doc.reference.delete();
     }
 
-    // Then delete section document
     await _sectionsRef.doc(sectionId).delete();
   }
 
@@ -60,7 +66,7 @@ class FirestoreService {
     return _sectionsRef
         .doc(sectionId)
         .collection('snippets')
-        .orderBy('orderIndex') // maintain order for UI reorder
+        .orderBy('orderIndex')
         .snapshots()
         .map(
           (snapshot) => snapshot.docs
@@ -94,12 +100,11 @@ class FirestoreService {
   }
 
   Future<void> updateSnippet(String sectionId, Snippet snippet) async {
-    final data = snippet.toMap();
     await _sectionsRef
         .doc(sectionId)
         .collection('snippets')
         .doc(snippet.id)
-        .update(data);
+        .update(snippet.toMap());
   }
 
   Future<void> deleteSnippet(String sectionId, String snippetId) async {
@@ -130,25 +135,33 @@ class FirestoreService {
     await batch.commit();
   }
 
-  // Get all snippets across all sections (collectionGroup query)
   Future<List<Snippet>> getAllSnippets() async {
-    final querySnapshot = await _db.collectionGroup('snippets').get();
-    return querySnapshot.docs
-        .map(
+    final sectionsSnapshot = await _sectionsRef.get();
+
+    List<Snippet> allSnippets = [];
+
+    for (var section in sectionsSnapshot.docs) {
+      final snippetsSnapshot = await section.reference
+          .collection('snippets')
+          .get();
+
+      allSnippets.addAll(
+        snippetsSnapshot.docs.map(
           (doc) => Snippet.fromMap(doc.id, doc.data() as Map<String, dynamic>),
-        )
-        .toList();
+        ),
+      );
+    }
+
+    return allSnippets;
   }
 
   // --- Chat Messages under aiChats collection ---
-
-  CollectionReference get _aiChatsRef => _db.collection('aiChats');
 
   Stream<List<ChatMessage>> streamChatMessages(String chatId) {
     return _aiChatsRef
         .doc(chatId)
         .collection('messages')
-        .orderBy('timestamp', descending: false)
+        .orderBy('timestamp')
         .snapshots()
         .map(
           (snapshot) => snapshot.docs.map((doc) {
@@ -170,32 +183,4 @@ class FirestoreService {
       'timestamp': message.timestamp,
     });
   }
-}
-
-// --- Section model ---
-class Section {
-  final String id;
-  final String name;
-
-  Section({required this.id, required this.name});
-
-  factory Section.fromDoc(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return Section(id: doc.id, name: data['name'] ?? '');
-  }
-}
-
-// --- ChatMessage model ---
-class ChatMessage {
-  final String id;
-  final String text;
-  final bool isUser;
-  final DateTime timestamp;
-
-  ChatMessage({
-    required this.id,
-    required this.text,
-    required this.isUser,
-    required this.timestamp,
-  });
 }

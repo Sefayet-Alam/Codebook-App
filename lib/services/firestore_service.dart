@@ -100,11 +100,18 @@ class FirestoreService {
   }
 
   Future<void> updateSnippet(String sectionId, Snippet snippet) async {
+    if (snippet.id.isEmpty) {
+      throw Exception('Snippet ID is empty, cannot update.');
+    }
+
+    final data = snippet.toMap();
+    data.remove('createdAt'); // Prevent overwriting timestamp on update
+
     await _sectionsRef
         .doc(sectionId)
         .collection('snippets')
         .doc(snippet.id)
-        .update(snippet.toMap());
+        .update(data);
   }
 
   Future<void> deleteSnippet(String sectionId, String snippetId) async {
@@ -135,21 +142,40 @@ class FirestoreService {
     await batch.commit();
   }
 
+  // Fetch all snippets from all sections, ordered by section and snippet orderIndex
   Future<List<Snippet>> getAllSnippets() async {
-    final sectionsSnapshot = await _sectionsRef.get();
+    final sectionsSnapshot = await _sectionsRef.orderBy('orderIndex').get();
 
     List<Snippet> allSnippets = [];
 
-    for (var section in sectionsSnapshot.docs) {
-      final snippetsSnapshot = await section.reference
+    for (var sectionDoc in sectionsSnapshot.docs) {
+      final sectionData = sectionDoc.data() as Map<String, dynamic>;
+      final sectionName = sectionData['name'] ?? '';
+
+      final snippetsSnapshot = await sectionDoc.reference
           .collection('snippets')
+          .orderBy('orderIndex')
           .get();
 
-      allSnippets.addAll(
-        snippetsSnapshot.docs.map(
-          (doc) => Snippet.fromMap(doc.id, doc.data() as Map<String, dynamic>),
-        ),
-      );
+      final sectionSnippets = snippetsSnapshot.docs.map((doc) {
+        final snippet = Snippet.fromMap(
+          doc.id,
+          doc.data() as Map<String, dynamic>,
+        );
+        // Override section with the current section's name
+        return Snippet(
+          id: snippet.id,
+          title: snippet.title,
+          language: snippet.language,
+          section: sectionName,
+          code: snippet.code,
+          markdown: snippet.markdown,
+          createdAt: snippet.createdAt,
+          orderIndex: snippet.orderIndex,
+        );
+      });
+
+      allSnippets.addAll(sectionSnippets);
     }
 
     return allSnippets;

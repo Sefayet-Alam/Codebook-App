@@ -1,3 +1,4 @@
+// snippet_edit_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/snippet.dart';
@@ -47,11 +48,18 @@ class _SnippetEditScreenState extends State<SnippetEditScreen> {
         code: _codeController.text.trim(),
         language: _languageController.text.trim(),
         createdAt: widget.snippet?.createdAt ?? DateTime.now(),
+        // Add any other required fields here
       );
 
       if (widget.snippet == null) {
+        // Add new snippet
         await firestore.addSnippet(widget.sectionId, snippet);
       } else {
+        // Update existing snippet (make sure ID is not empty!)
+        if (snippet.id.isEmpty) {
+          // Defensive check
+          throw Exception('Cannot update snippet without valid id');
+        }
         await firestore.updateSnippet(widget.sectionId, snippet);
       }
 
@@ -90,6 +98,7 @@ class _SnippetEditScreenState extends State<SnippetEditScreen> {
                     ],
                   ),
                 );
+
                 if (confirm == true) {
                   final firestore = context.read<FirestoreService>();
                   await firestore.deleteSnippet(
@@ -97,8 +106,8 @@ class _SnippetEditScreenState extends State<SnippetEditScreen> {
                     widget.snippet!.id,
                   );
                   if (context.mounted) {
-                    Navigator.pop(context); // exit edit
-                    Navigator.pop(context); // return to list
+                    Navigator.pop(context); // Exit edit screen
+                    Navigator.pop(context); // Back to list screen
                   }
                 }
               },

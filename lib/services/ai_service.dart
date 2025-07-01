@@ -33,13 +33,18 @@ class AIService {
 
     try {
       final snippets = await _fetchUserSnippets();
-      final limitedSnippets = snippets.take(3).toList();
 
-      final snippetContext = limitedSnippets.isNotEmpty
-          ? "User's snippets:\n${limitedSnippets.map((s) {
-              final truncatedCode = s.code.length > 500 ? s.code.substring(0, 500) + '\n...' : s.code;
+      // Limit number of snippets to send (adjust as needed)
+      final snippetsToSend = snippets.take(5).toList();
+
+      // Limit length of each snippet's code (adjust length as needed)
+      final truncatedLength = 800;
+
+      final snippetContext = snippetsToSend.isNotEmpty
+          ? "User's snippets:\n${snippetsToSend.map((s) {
+              final truncatedCode = s.code.length > truncatedLength ? s.code.substring(0, truncatedLength) + '\n...' : s.code;
               return '### ${s.title} (${s.language})\n```${s.language}\n$truncatedCode\n```';
-            }).join('\n')}"
+            }).join('\n\n')}"
           : "No snippets available";
 
       final response = await http
@@ -60,7 +65,7 @@ class AIService {
                 {"role": "user", "content": prompt},
               ],
               "temperature": 0.7,
-              "max_tokens": 1024, // safer token count
+              "max_tokens": 1024,
             }),
           )
           .timeout(const Duration(seconds: 15));
@@ -73,14 +78,11 @@ class AIService {
         debugPrint('API error ${response.statusCode}: ${response.body}');
         throw Exception('API error ${response.statusCode}: ${response.body}');
       }
-    } on SocketException catch (e) {
-      debugPrint('Network error: ${e.message}');
-      throw Exception('Network error: ${e.message}');
-    } on TimeoutException {
-      debugPrint('Request timed out');
-      throw Exception('Request timed out after 15 seconds');
+    } on SocketException catch (_) {
+      throw Exception('Network error: Please check your internet connection.');
+    } on TimeoutException catch (_) {
+      throw Exception('Request timeout: The server took too long to respond.');
     } catch (e) {
-      debugPrint('Unexpected error: $e');
       throw Exception('Unexpected error: $e');
     }
   }

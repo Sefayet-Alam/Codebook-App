@@ -93,10 +93,12 @@ class _PdfScreenState extends State<PdfScreen> {
       return;
     }
 
-    final pdf = await PdfGenerator.generateCombinedPdf(
+    // Use simple PDF generation here for a single-column combined PDF
+    final pdf = await PdfGenerator.generateSimplePdf(
       snippets,
       teamName: teamName,
     );
+
     final savedPath = await _savePdfToAppStorage(pdf);
 
     setState(() => _saving = false);

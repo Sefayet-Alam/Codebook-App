@@ -8,15 +8,17 @@ class Snippet {
   final String code;
   final String markdown;
   final DateTime createdAt;
+  final int? orderIndex; // Add orderIndex as nullable int
 
   Snippet({
     required this.id,
     required this.title,
     required this.language,
-    this.section = '', // default empty string if not provided
+    this.section = '',
     required this.code,
-    this.markdown = '', // default empty string
+    this.markdown = '',
     required this.createdAt,
+    this.orderIndex,
   });
 
   factory Snippet.fromMap(String id, Map<String, dynamic> data) {
@@ -30,6 +32,7 @@ class Snippet {
       createdAt: data['createdAt'] is Timestamp
           ? (data['createdAt'] as Timestamp).toDate()
           : DateTime.now(),
+      orderIndex: data['orderIndex'] != null ? data['orderIndex'] as int : null,
     );
   }
 
@@ -41,6 +44,7 @@ class Snippet {
       'code': code,
       'markdown': markdown,
       'createdAt': Timestamp.fromDate(createdAt),
+      'orderIndex': orderIndex,
     };
   }
 }

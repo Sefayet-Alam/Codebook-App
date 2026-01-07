@@ -78,14 +78,14 @@ cd Codebook-App
 flutter pub get
 ```
 
-📂 Project Structure
+📂 Project Structure  </br>
 lib/
-├── models/             # Data models (Snippet, Section, etc.)
-├── screens/            # All the UI screens
-├── services/           # Firebase, Auth, and AI API logic
-├── widgets/            # Reusable UI components
-├── utils/              # Utility files (e.g., PDF generator)
-├── env.dart            # Your private API key file (ignored in git)
+├── models/             # Data models (Snippet, Section, etc.) </br>
+├── screens/            # All the UI screens  </br>
+├── services/           # Firebase, Auth, and AI API logic  </br>
+├── widgets/            # Reusable UI components  </br>
+├── utils/              # Utility files (e.g., PDF generator)  </br>
+├── env.dart            # Your private API key file (ignored in git)  </br>
 main.dart               # App entry point
 
 

@@ -106,6 +106,6 @@ Sefayet Alam  </br>
 📧 Contact | 🌐 GitHub
 
 
-flutter clean
-flutter pub get
-flutter run
+flutter clean  </br>
+flutter pub get  </br>
+flutter run  </br>

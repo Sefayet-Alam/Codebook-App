@@ -4,7 +4,7 @@ Codebook is a sleek, mobile-friendly Flutter app designed for developers to **st
 
 ![Flutter](https://img.shields.io/badge/Built%20with-Flutter-blue?logo=flutter)
 ![Firebase](https://img.shields.io/badge/Backend-Firebase-orange?logo=firebase)
-![AI](https://img.shields.io/badge/AI-Groq%2kf0LLaMA3-purple?logo=openai)
+![AI](https://img.shields.io/badge/AI-Groq%2kf0LLaMA3-purple?logo=openai) 
 ![License](https://img.shields.io/github/license/Sefayet-Alam/Codebook-App)
 
 ---
@@ -86,23 +86,23 @@ lib/
 ├── widgets/            # Reusable UI components  </br>
 ├── utils/              # Utility files (e.g., PDF generator)  </br>
 ├── env.dart            # Your private API key file (ignored in git)  </br>
-main.dart               # App entry point
+main.dart               # App entry point  </br>
 
 
-🤖 Powered By
-💙 Flutter
+🤖 Powered By  </br>
+💙 Flutter  </br>
 
-🔥 Firebase
+🔥 Firebase  </br>
 
-🧠 Groq API (LLaMA 3)
+🧠 Groq API (LLaMA 3)  </br>
 
-🖨️ pdf and printing packages
+🖨️ pdf and printing packages  </br>
 
-🧠 flutter_markdown
+🧠 flutter_markdown  </br>
 
 
-🙋‍♂️ Author
-Sefayet Alam
+🙋‍♂️ Author  </br>
+Sefayet Alam  </br>
 📧 Contact | 🌐 GitHub
 
 

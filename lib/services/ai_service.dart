@@ -55,7 +55,7 @@ class AIService {
               'Authorization': 'Bearer $_apiKey',
             },
             body: jsonEncode({
-              "model": "llama3-70b-8192",
+              "model": "openai/gpt-oss-120b",
               "messages": [
                 {
                   "role": "system",

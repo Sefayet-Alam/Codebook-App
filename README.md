@@ -112,3 +112,30 @@ Sefayet Alam
 flutter clean
 flutter pub get
 flutter run
+
+### TO Redeploy /Start 
+
+# 0) (Optional) pick a folder to work in
+mkdir -p ~/dev && cd ~/dev
+
+# 1) Clone your repo
+git clone https://github.com/Sefayet-Alam/Codebook-App.git
+cd Codebook-App
+
+# 2) Create your .env (ONLY your key goes here)
+cat > .env <<'EOF'
+GROQ_API_KEY=PASTE_YOUR_KEY_HERE
+EOF
+
+# 3) Make sure Flutter is installed and available
+flutter --version
+
+# 4) Clean + install dependencies
+flutter clean
+flutter pub get
+
+# 5) Confirm your phone is detected
+flutter devices
+
+# 6) Build + install + launch on the attached phone (debug)
+flutter run

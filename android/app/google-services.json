@@ -1,0 +1,46 @@
+{
+    "project_info": {
+        "project_number": "719688679415",
+        "project_id": "codebook-app-ea943",
+        "storage_bucket": "codebook-app-ea943.firebasestorage.app"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:719688679415:android:637aa6786b95cf4f68b8f2",
+                "android_client_info": {
+                    "package_name": "com.example.codebook_app"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "719688679415-5t92d45cl4p8ncjrhfd52ih6h5k258dm.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyB7DjOIRSXzqKreAug6iAPcMJ5aTfToPXg"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "719688679415-5t92d45cl4p8ncjrhfd52ih6h5k258dm.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "719688679415-u9831e2u4930jr3vat2c8rq8vl5m0emq.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.example.codebookApp"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}

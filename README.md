@@ -139,3 +139,8 @@ flutter devices
 
 # 6) Build + install + launch on the attached phone (debug)
 flutter run
+
+#7) Final Release : 
+flutter clean
+flutter pub get
+flutter build apk --release

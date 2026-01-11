@@ -21,7 +21,7 @@ class SharingService {
         XFile(filePath),
       ], text: 'Sharing snippet file: $fileName');
     } catch (e) {
-      print('Error sharing file: $e');
+      // print('Error sharing file: $e');
       rethrow;
     }
   }

@@ -60,7 +60,7 @@ class AIService {
                 {
                   "role": "system",
                   "content":
-                      "You're a coding assistant. Format responses in markdown.\nUser's snippets:\n$snippetContext",
+                      "You're a coding assistant. Format responses in markdown.Reply in brief.If user asks for code, only give snippet (with as less comments possible).Give explanation only when user asks.\nUser's snippets:\n$snippetContext",
                 },
                 {"role": "user", "content": prompt},
               ],

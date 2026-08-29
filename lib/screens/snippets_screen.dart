@@ -192,7 +192,7 @@ class _SnippetsScreenState extends State<SnippetsScreen> {
         title: Text(
           _selectedLanguage == null
               ? 'Snippets - ${widget.sectionName}'
-              : 'Snippets - ${widget.sectionName} (${_selectedLanguage})',
+              : 'Snippets - ${widget.sectionName} ($_selectedLanguage)',
         ),
         actions: [
           IconButton(

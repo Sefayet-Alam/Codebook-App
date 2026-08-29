@@ -22,7 +22,7 @@ class SnippetCard extends StatelessWidget {
             color: Colors.grey[200],
             child: HighlightView(
               snippet.code ?? '',
-              language: (snippet.language?.toLowerCase() ?? 'plaintext'),
+              language: (snippet.language.toLowerCase() ?? 'plaintext'),
               theme: githubTheme,
               padding: const EdgeInsets.all(12),
               textStyle: const TextStyle(fontFamily: 'Courier', fontSize: 14),

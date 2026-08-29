@@ -62,7 +62,7 @@ ${snippet.markdown}
               ),
               child: HighlightView(
                 snippet.code ?? '',
-                language: (snippet.language?.toLowerCase() ?? 'plaintext'),
+                language: (snippet.language.toLowerCase() ?? 'plaintext'),
                 theme: githubTheme,
                 textStyle: const TextStyle(
                   fontFamily: 'SourceCodePro',

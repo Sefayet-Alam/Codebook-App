@@ -5,7 +5,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
 import 'package:open_file/open_file.dart';
 
-import '../models/snippet.dart';
 import '../services/firestore_service.dart';
 import '../utils/pdf_generator.dart';
 

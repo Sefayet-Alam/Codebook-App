@@ -38,11 +38,11 @@ class AIService {
       final snippetsToSend = snippets.take(5).toList();
 
       // Limit length of each snippet's code (adjust length as needed)
-      final truncatedLength = 800;
+      const truncatedLength = 800;
 
       final snippetContext = snippetsToSend.isNotEmpty
           ? "User's snippets:\n${snippetsToSend.map((s) {
-              final truncatedCode = s.code.length > truncatedLength ? s.code.substring(0, truncatedLength) + '\n...' : s.code;
+              final truncatedCode = s.code.length > truncatedLength ? '${s.code.substring(0, truncatedLength)}\n...' : s.code;
               return '### ${s.title} (${s.language})\n```${s.language}\n$truncatedCode\n```';
             }).join('\n\n')}"
           : "No snippets available";
@@ -55,7 +55,7 @@ class AIService {
               'Authorization': 'Bearer $_apiKey',
             },
             body: jsonEncode({
-              "model": "llama3-70b-8192",
+              "model": "openai/gpt-oss-120b",
               "messages": [
                 {
                   "role": "system",

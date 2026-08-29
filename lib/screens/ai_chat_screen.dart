@@ -92,7 +92,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
         : CrossAxisAlignment.start;
     final bgColor = isUser
         ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.surfaceVariant;
+        : Theme.of(context).colorScheme.surfaceContainerHighest;
     final textColor = isUser ? Colors.white : Colors.black87;
 
     final markdownStyle = MarkdownStyleSheet(
@@ -234,7 +234,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                           filled: true,
                           fillColor: Theme.of(
                             context,
-                          ).colorScheme.surfaceVariant,
+                          ).colorScheme.surfaceContainerHighest,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,

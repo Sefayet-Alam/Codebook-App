@@ -54,16 +54,19 @@ class BrowseScreen extends StatelessWidget {
       body: StreamBuilder<List<Section>>(
         stream: firestore.streamSections(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          }
 
-          if (snapshot.hasError)
+          if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
           final sections = snapshot.data ?? [];
 
-          if (sections.isEmpty)
+          if (sections.isEmpty) {
             return const Center(child: Text('No sections yet'));
+          }
 
           return ListView.builder(
             itemCount: sections.length,

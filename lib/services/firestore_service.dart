@@ -72,7 +72,7 @@ class FirestoreService {
           (snapshot) => snapshot.docs
               .map(
                 (doc) =>
-                    Snippet.fromMap(doc.id, doc.data() as Map<String, dynamic>),
+                    Snippet.fromMap(doc.id, doc.data()),
               )
               .toList(),
         );
@@ -160,7 +160,7 @@ class FirestoreService {
       final sectionSnippets = snippetsSnapshot.docs.map((doc) {
         final snippet = Snippet.fromMap(
           doc.id,
-          doc.data() as Map<String, dynamic>,
+          doc.data(),
         );
         // Override section with the current section's name
         return Snippet(
@@ -191,7 +191,7 @@ class FirestoreService {
         .snapshots()
         .map(
           (snapshot) => snapshot.docs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
+            final data = doc.data();
             return ChatMessage(
               id: doc.id,
               text: data['text'] ?? '',

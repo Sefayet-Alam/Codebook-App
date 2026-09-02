@@ -35,6 +35,23 @@ Codebook is a sleek, mobile-friendly Flutter app designed for developers to **st
 
 ---
 
+## 📲 Download the Android App
+
+You can download the latest Android APK from the [Codebook GitHub Releases page](https://github.com/Sefayet-Alam/Codebook-App/releases/latest).
+
+### How to download and install
+
+1. Open the [latest release](https://github.com/Sefayet-Alam/Codebook-App/releases/latest) on your Android phone.
+2. Scroll to the **Assets** section.
+3. Tap the file ending in `.apk`, such as `app-release.apk`. Do not download the automatically generated **Source code** ZIP or TAR.GZ files.
+4. When the download finishes, open the APK from your browser or **Downloads** folder.
+5. If Android asks for permission, allow **Install unknown apps** for the browser or file manager you are using.
+6. Tap **Install**, then open Codebook.
+
+> The APK is for Android devices. iPhones and iPads cannot install APK files. This GitHub build is currently provided as a portfolio/demo release rather than an app-store production release. Only download it from this repository's official Releases page, and disable **Install unknown apps** again afterward if you do not need it.
+
+---
+
 ## 📸 Screenshots
 
 <table>

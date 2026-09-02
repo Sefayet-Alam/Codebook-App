@@ -1,19 +1,33 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:codebook_app/main.dart';
+import 'package:flutter/material.dart';
+import 'package:codebook_app/widgets/code_viewer.dart';
 
 void main() {
-  testWidgets('HomeScreen displays main buttons', (WidgetTester tester) async {
-    // Build the CodebookApp widget
-    await tester.pumpWidget(const CodebookApp());
+  testWidgets('CodeViewer displays code and available actions', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CodeViewer(
+            code: 'void main() {}',
+            language: 'dart',
+            onCopy: _noop,
+            onShare: _noop,
+          ),
+        ),
+      ),
+    );
 
-    // Wait for animations, streams, etc.
-    await tester.pumpAndSettle();
-
-    // Verify the presence of buttons by their labels
-    expect(find.text('Browse your Codebook'), findsOneWidget);
-    expect(find.text('Get AI Help'), findsOneWidget);
-    expect(find.text('Print PDF'), findsOneWidget);
-    expect(find.text('Quit App'), findsOneWidget);
+    expect(find.text('View Code'), findsOneWidget);
+    expect(
+      tester.widget<CodeViewer>(find.byType(CodeViewer)).code,
+      'void main() {}',
+    );
+    expect(find.text('Copy'), findsOneWidget);
+    expect(find.text('Share'), findsOneWidget);
+    expect(find.text('Close'), findsOneWidget);
   });
 }
+
+void _noop() {}
